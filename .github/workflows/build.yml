@@ -1,5 +1,6 @@
+name: Build
 on:
-  push:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -11,7 +12,7 @@ jobs:
             # { name: 'linux', image: 'ubuntu-latest' },
             { name: "windows", image: "windows-latest" },
             { name: "macos", image: "macos-latest" },
-          ]
+        ]
 
     steps:
       - uses: actions/checkout@v4
