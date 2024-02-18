@@ -1,0 +1,29 @@
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [
+            # { name: 'linux', image: 'ubuntu-latest' },
+            { name: "windows", image: "windows-latest" },
+            { name: "macos", image: "macos-latest" },
+          ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - run: pip install -r requirements.txt pyinstaller
+      - run: pyinstaller --hidden-import=edge-tts --onefile edge-tts.py
+      # Optionally verify that it works (provided that it does not need user interaction)
+      - run: ./dist/edge-tts --list-voices
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.os }}
+          path: dist/*
